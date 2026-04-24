@@ -67,11 +67,11 @@ services:
     container_name: bookstore-keycloak
     command: start-dev --import-realm
     environment:
-      KC_BOOTSTRAP_ADMIN_USERNAME: admin
-      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
       KC_HTTP_PORT: 8090
     volumes:
-      - ./Keycloak/bookstore-realm.json:/opt/keycloak/data/import/bookstore-realm.json:ro
+      - ./containerization/bookstore-realm.json:/opt/keycloak/data/import/bookstore-realm.json:ro
     ports:
       - "8090:8090"
     healthcheck:
@@ -246,6 +246,58 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - bookstore-network
+
+  # Angular SSR Frontend
+  ng-bookstore:
+    image: dkiriakakis/ng-bookstore:${IMAGE_TAG:-latest}
+    container_name: bookstore-ng-frontend
+    environment:
+      PORT: 4000
+      API_URL: "http://gateway-server:8080"
+    depends_on:
+      gateway-server:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:4000",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - bookstore-network
+  # Nginx Reverse Proxy (edge entry point)
+  nginx:
+    image: dkiriakakis/nginx:${IMAGE_TAG:-latest}
+    container_name: bookstore-nginx
+    ports:
+      - "80:80"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://127.0.0.1:80",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      ng-bookstore:
+        condition: service_healthy
+      gateway-server:
+        condition: service_healthy
     networks:
       - bookstore-network
 
