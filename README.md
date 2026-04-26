@@ -98,4 +98,4 @@ Happy coding!
 - This parent repository currently contains direct chapter materials for Chapter 1 and Chapter 21.
 - Backend implementation chapters are maintained in the backend repository.
 - Frontend implementation chapters are maintained in the frontend repository.
->>>>>>> Stashed changes
+
