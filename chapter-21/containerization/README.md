@@ -1,67 +1,106 @@
-# Bookstore Backend Docker Compose User Guide
+# Chapter 21 - Connecting Frontend and Backend in Production
 
-## Overview
+## Chapter Overview
 
-This guide explains how to run the adjacent [docker-compose.yml](docker-compose.yml) file in this folder.
+In the previous chapter, we focused on building and deploying the Angular frontend so it can be served as a production-ready application. At this stage, we now have a frontend and a set of backend microservices exposed through a centralized API gateway.
 
-By default, the compose file downloads pre-built backend images from the author Docker Hub namespace:
+This chapter completes the platform by connecting frontend and backend in a production-oriented way. The focus is not only on making API calls work, but also on orchestrating services correctly, securing communication boundaries, and validating end-to-end behavior under deployment conditions.
 
-- `ansgohar/eureka-server`
-- `ansgohar/gateway-server`
-- `ansgohar/inventory-service`
-- `ansgohar/user-service`
+This chapter covers how to:
 
-The full stack includes infrastructure and backend services:
+- Explore Docker Compose as a production-oriented orchestration tool
+- Enable secure communication between frontend and backend
+- Run the full platform locally with Docker Compose
+- Avoid common pitfalls in microservices containerization
+- Walk through the complete end-to-end request flow
 
-- PostgreSQL
-- MongoDB
-- Zipkin
-- Keycloak
-- Eureka Server
-- Inventory Service
-- User Service
-- Gateway Server
+Technical requirement and source code:
+https://github.com/PacktPublishing/Spring-Boot-and-Angular-2E/tree/main/chapter-21
 
-## Prerequisites
+## Table of Contents
 
-- Docker Desktop (or Docker Engine + Compose plugin with `docker compose`)
-- At least 6 GB RAM available to Docker
-- Internet access to pull required images
+- [Chapter 21 - Connecting Frontend and Backend in Production](#chapter-21---connecting-frontend-and-backend-in-production)
+  - [Chapter Overview](#chapter-overview)
+  - [Table of Contents](#table-of-contents)
+  - [Exploring Docker Compose as a Production-Oriented Orchestration Tool](#exploring-docker-compose-as-a-production-oriented-orchestration-tool)
+    - [Core Compose Concepts Used in This Chapter](#core-compose-concepts-used-in-this-chapter)
+  - [Containerizing the Bookstore Platform for Production](#containerizing-the-bookstore-platform-for-production)
+    - [Networking and Persistence Model](#networking-and-persistence-model)
+    - [Backend Image Tag Strategy](#backend-image-tag-strategy)
+  - [Running the Full Platform Locally Using Docker Compose](#running-the-full-platform-locally-using-docker-compose)
+    - [Services and Ports](#services-and-ports)
+    - [Useful Runtime Commands](#useful-runtime-commands)
+  - [Enabling Secure Communication Between Frontend and Backend](#enabling-secure-communication-between-frontend-and-backend)
+    - [Why This Matters](#why-this-matters)
+    - [Recommended Communication Model](#recommended-communication-model)
+    - [Secure Communication Best Practices](#secure-communication-best-practices)
+  - [Common Pitfalls in Containerizing Microservices Applications](#common-pitfalls-in-containerizing-microservices-applications)
+  - [Bringing It All Together: End-to-End Flow Walkthrough](#bringing-it-all-together-end-to-end-flow-walkthrough)
+  - [Troubleshooting Guide](#troubleshooting-guide)
+    - [1. Port Already in Use](#1-port-already-in-use)
+    - [2. Keycloak Realm Import Missing](#2-keycloak-realm-import-missing)
+    - [3. Services Remain Unhealthy or Restart Repeatedly](#3-services-remain-unhealthy-or-restart-repeatedly)
+    - [4. Unable to Pull Author Images](#4-unable-to-pull-author-images)
+    - [5. Gateway Responds but API Calls Fail](#5-gateway-responds-but-api-calls-fail)
+    - [6. MongoDB Authentication Errors](#6-mongodb-authentication-errors)
+    - [7. Full Environment Reset](#7-full-environment-reset)
+  - [References](#references)
+  - [Summary](#summary)
 
-Optional:
+## Exploring Docker Compose as a Production-Oriented Orchestration Tool
 
-- Docker Hub login (only needed if your environment enforces auth/rate limits)
-- Local source code if you want to rebuild images instead of pulling them
+Docker Compose is often treated as a local convenience, but in real projects it becomes a declarative system blueprint. It defines:
 
-## What This Compose File Does
+- What services exist
+- How services communicate
+- Which dependencies and startup conditions are required
+- How environment-specific configuration is injected
 
-When you run compose from this folder, Docker will:
+For the Bookstore platform, Compose models infrastructure and application services as one runnable unit. This provides consistent startup, repeatable environments, and clear operational boundaries.
 
-1. Pull infrastructure images (`postgres`, `mongo`, `zipkin`, `keycloak`).
-2. Pull backend service images from author repositories (`ansgohar/*`).
-3. Start all services with health checks and dependency ordering.
-4. Attach everything to one shared bridge network.
-5. Persist database state in named volumes.
+### Core Compose Concepts Used in This Chapter
 
-## Services and Ports
+1. Services: Each microservice and infrastructure component runs as an isolated container.
+2. Networks: Services communicate using service names such as `postgres`, `mongodb`, and `gateway-server`.
+3. Volumes: PostgreSQL and MongoDB use persistent named volumes to avoid data loss between restarts.
+4. Dependencies: `depends_on` and health checks coordinate startup order across the system.
 
-| Service | Container Name | Port |
-|---|---|---|
-| Gateway | `bookstore-gateway-server` | `8080` |
-| Eureka | `bookstore-eureka-server` | `8761` |
-| Inventory | `bookstore-inventory-service` | `8081` |
-| User | `bookstore-user-service` | `8082` |
-| Keycloak | `bookstore-keycloak` | `8090` |
-| PostgreSQL | `bookstore-postgres` | `5432` |
-| MongoDB | `bookstore-mongo` | `27017` |
-| Zipkin | `bookstore-zipkin` | `9411` |
+## Containerizing the Bookstore Platform for Production
 
-## Quick Start (Pull Author Images and Run)
+The platform definition includes the following services:
 
-From repository root:
+- PostgreSQL for inventory persistence
+- MongoDB for user persistence
+- Zipkin for distributed tracing
+- Keycloak for identity and access management
+- Eureka server for discovery
+- Inventory service and user service for business APIs
+- Gateway server as the single backend entry point
+
+### Networking and Persistence Model
+
+- All services run on a shared bridge network.
+- Internal communication uses service names instead of `localhost`.
+- Persistent volumes (`postgres_data`, `mongo_data`) preserve database state across container recreation.
+
+### Backend Image Tag Strategy
+
+Backend service images follow this pattern:
+
+- `ansgohar/<service-name>:${IMAGE_TAG:-latest}`
+
+Example:
 
 ```bash
-cd containerization
+IMAGE_TAG=v0.0.1 docker compose pull
+IMAGE_TAG=v0.0.1 docker compose up -d
+```
+
+## Running the Full Platform Locally Using Docker Compose
+
+From [chapter-21/containerization](docker-compose.yml), run:
+
+```bash
 docker compose pull
 docker compose up -d
 docker compose ps
@@ -74,118 +113,117 @@ Open:
 - Zipkin: http://localhost:9411
 - Keycloak: http://localhost:8090
 
-The `docker compose pull` command is the key step that downloads images from the author repository references in [docker-compose.yml](docker-compose.yml).
+### Services and Ports
 
-## Image Tag Selection
+| Service | Container Name | Port |
+|---|---|---|
+| Gateway | `bookstore-gateway-server` | `8080` |
+| Eureka | `bookstore-eureka-server` | `8761` |
+| Inventory | `bookstore-inventory-service` | `8081` |
+| User | `bookstore-user-service` | `8082` |
+| Keycloak | `bookstore-keycloak` | `8090` |
+| PostgreSQL | `bookstore-postgres` | `5432` |
+| MongoDB | `bookstore-mongo` | `27017` |
+| Zipkin | `bookstore-zipkin` | `9411` |
 
-The compose file uses this pattern for backend services:
-
-- `ansgohar/<service-name>:${IMAGE_TAG:-latest}`
-
-Examples:
-
-```bash
-# Use latest tag (default)
-docker compose pull
-
-# Use an explicit tag
-IMAGE_TAG=v0.0.1 docker compose pull
-IMAGE_TAG=v0.0.1 docker compose up -d
-```
-
-## Build and Start Options
-
-### Option A: Use author-published images (recommended)
+### Useful Runtime Commands
 
 ```bash
-docker compose pull
-docker compose up -d
-```
-
-### Option B: Rebuild service images locally
-
-Use this only if you changed source code and want local builds instead of pulling author images.
-
-```bash
-# From repository root, build each service image as needed
-cd chapter-10/eureka-server && docker build -t ansgohar/eureka-server:latest -f Containerfile .
-cd ../gateway-server && docker build -t ansgohar/gateway-server:latest -f Containerfile .
-cd ../inventory-ms && docker build -t ansgohar/inventory-service:latest -f Containerfile .
-cd ../user-ms && docker build -t ansgohar/user-service:latest -f Containerfile .
-
-# Then run compose
-cd ../../containerization
-docker compose up -d
-```
-
-### Use a different image tag
-
-`docker-compose.yml` supports `IMAGE_TAG` for author images.
-
-```bash
-IMAGE_TAG=v0.0.1 docker compose up -d
-```
-
-## Useful Runtime Commands
-
-```bash
-# Check service state and health
 docker compose ps
-
-# Tail logs for all services
 docker compose logs -f --tail=200
-
-# Tail logs for one service
 docker compose logs -f --tail=200 gateway-server
-
-# Restart one service
 docker compose restart inventory-service
-
-# Stop stack
 docker compose down
-
-# Stop and remove volumes (destructive for DB data)
 docker compose down -v
 ```
 
-## Troubleshooting
+## Enabling Secure Communication Between Frontend and Backend
 
-### 1) Port already in use
+Production communication should flow through a single backend boundary: the API gateway.
 
-Symptom:
+### Why This Matters
 
-- Compose fails with port binding error for `8080`, `8761`, `8090`, `5432`, `27017`, or `9411`.
+During development, frontend and backend frequently run on different origins (for example `localhost:4200` and `localhost:8080`). In production, this introduces security and consistency concerns:
 
-Checks:
+- CORS policy management
+- Token propagation and validation
+- Endpoint stability
+- HTTPS enforcement at the edge
+
+### Recommended Communication Model
+
+1. Frontend calls only the gateway.
+2. Gateway validates JWTs and routes internally.
+3. Internal services stay private on the Compose network.
+4. CORS policy is centralized at the gateway.
+
+Gateway JWT resource server configuration example:
+
+```yaml
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI}
+```
+
+### Secure Communication Best Practices
+
+| Practice | Why It Matters |
+|---|---|
+| Route frontend calls through gateway | Centralizes routing and security |
+| Keep internal services private | Reduces attack surface |
+| Configure CORS at gateway level | Provides consistent cross-origin policy |
+| Use relative API paths in frontend | Simplifies deployment topology |
+| Validate JWT at gateway | Centralizes authentication checks |
+| Enforce HTTPS at edge | Secures data in transit |
+
+## Common Pitfalls in Containerizing Microservices Applications
+
+Containerization failures are usually operational and architectural, not syntax errors. Frequent pitfalls include:
+
+1. Treating containerized runtime as identical to local IDE runtime.
+2. Building large single-stage images instead of optimized multi-stage images.
+3. Using `localhost` in inter-service URLs instead of Compose service names.
+4. Assuming startup order means readiness; unhealthy dependencies can still fail requests.
+5. Exposing each internal service publicly instead of enforcing gateway-first access.
+6. Forgetting persistent volumes for stateful services.
+7. Relying on floating tags without explicit versioning discipline.
+
+## Bringing It All Together: End-to-End Flow Walkthrough
+
+The production request path is:
+
+1. Browser loads Angular frontend.
+2. Frontend sends API request to gateway.
+3. Gateway validates token and routes by service discovery.
+4. Target microservice executes business logic and data access.
+5. Response returns through gateway to frontend.
+6. Zipkin traces the full request across service boundaries.
+
+This flow reinforces the platform boundaries used throughout the chapter: single entry point, private internal services, centralized security, and observable distributed behavior.
+
+## Troubleshooting Guide
+
+### 1. Port Already in Use
+
+Check:
 
 ```bash
 lsof -nP -iTCP:8080 -sTCP:LISTEN
 lsof -nP -iTCP:5432 -sTCP:LISTEN
 ```
 
-Fix:
+Fix by stopping conflicting services or adjusting host port mappings.
 
-- Stop conflicting local service or container.
-- Or change host-side port mappings in `docker-compose.yml`.
+### 2. Keycloak Realm Import Missing
 
-### 2) Keycloak realm import file missing
+Ensure this file exists:
 
-Symptom:
+- `containerization/Keycloak/bookstore-realm.json`
 
-- Keycloak fails to start because `./Keycloak/bookstore-realm.json` cannot be mounted.
-
-Fix:
-
-- Confirm the file exists at `containerization/Keycloak/bookstore-realm.json`.
-- If unavailable, remove the volume mount temporarily and start Keycloak without import.
-
-### 3) Service stays unhealthy or restarts
-
-Symptom:
-
-- One or more services remain `unhealthy` or restart repeatedly.
-
-Checks:
+### 3. Services Remain Unhealthy or Restart Repeatedly
 
 ```bash
 docker compose ps
@@ -195,85 +233,47 @@ docker compose logs --tail=200 user-service
 docker compose logs --tail=200 gateway-server
 ```
 
-Fix:
-
-- Wait for dependencies (Keycloak/Eureka/databases) to become healthy.
-- Restart dependent services once dependencies are stable:
+When dependencies become healthy, restart dependent services:
 
 ```bash
 docker compose restart inventory-service user-service gateway-server
 ```
 
-### 4) Cannot pull author service images
-
-Symptom:
-
-- `pull access denied` for `ansgohar/...` images.
-
-Fix options:
-
-1. Login to Docker Hub and retry.
+### 4. Unable to Pull Author Images
 
 ```bash
 docker login
 docker compose pull
 ```
 
-2. Build local images with matching names and tags, then run compose.
-
-3. Verify the tag exists. If not sure, retry with `latest`.
+Or use explicit default tag:
 
 ```bash
 IMAGE_TAG=latest docker compose pull
 ```
 
-### 5) Gateway starts but APIs fail
+### 5. Gateway Responds but API Calls Fail
 
-Symptom:
-
-- Gateway responds but inventory/user endpoints fail.
-
-Checks:
-
-```bash
-docker compose logs --tail=200 gateway-server
-docker compose logs --tail=200 eureka-server
-docker compose logs --tail=200 inventory-service
-docker compose logs --tail=200 user-service
-```
-
-Fix:
-
-- Ensure services are registered in Eureka.
-- Ensure database containers are healthy.
-- Restart gateway after dependent services are healthy:
+Verify Eureka registration and database readiness, then restart gateway:
 
 ```bash
 docker compose restart gateway-server
 ```
 
-### 6) MongoDB authentication errors
+### 6. MongoDB Authentication Errors
 
-Symptom:
+Confirm user-service Mongo URI matches the Compose credentials:
 
-- `user-service` cannot authenticate to MongoDB.
+- `mongodb://bookstore:bookstore123@mongodb:27017/userDB?authSource=admin`
 
-Fix:
-
-- Keep the URI aligned with compose env:
-
-`mongodb://bookstore:bookstore123@mongodb:27017/userDB?authSource=admin`
-
-- If credentials changed, recreate stack with fresh data volumes:
+If credentials drifted and state is inconsistent:
 
 ```bash
 docker compose down -v
 docker compose up -d
 ```
 
-### 7) Reset environment completely
-
-Use this when state is inconsistent and a clean restart is needed.
+### 7. Full Environment Reset
 
 ```bash
 docker compose down -v
@@ -282,12 +282,16 @@ docker compose pull
 docker compose up -d
 ```
 
-## Notes
+## References
 
-- Container-to-container communication uses service names (`postgres`, `mongodb`, `eureka-server`, `zipkin`, `keycloak`), not `localhost`.
-- Health checks control startup sequencing through `depends_on` conditions.
-- Database data is persisted in named volumes (`postgres_data`, `mongo_data`).
+- Chapter source code: https://github.com/PacktPublishing/Spring-Boot-and-Angular-2E/tree/main/chapter-21
+- Docker Compose docs: https://docs.docker.com/compose/
+- Spring Security Resource Server (JWT): https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html
+- Keycloak documentation: https://www.keycloak.org/documentation
+- Zipkin documentation: https://zipkin.io/pages/quickstart.html
 
-## Related Chapter Guide
+## Summary
 
-- Chapter 10 overview and packaging concepts: [chapter-10/README.md](../chapter-10/README.md)
+This chapter connects frontend and backend into a single production-oriented platform.
+
+You learned how Docker Compose orchestrates the full Bookstore system, how to enforce secure frontend-backend communication through the gateway, how to run and validate the stack locally, and how to prevent common containerization mistakes that often appear in distributed deployments.
