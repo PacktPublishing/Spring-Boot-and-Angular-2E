@@ -45,9 +45,6 @@ You’ll find backend and frontend code, guides, and resources for each section.
 - `/backend/` – Spring Boot microservices (see [backend/README.md](./backend/README.md))
 - `/frontend/` – Angular application (see [frontend/README.md](./frontend/README.md))
 
-
----
-
 ---
 
 ## 🚀 Getting Started
