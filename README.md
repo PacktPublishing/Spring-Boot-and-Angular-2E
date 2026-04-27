@@ -58,9 +58,6 @@ You’ll find backend and frontend code, guides, and resources for each section.
 
 ---
 
-<<<<<<< Updated upstream
-Happy coding!
-=======
 ## Chapter-to-Repository Mapping
 
 | Chapter | Title | Primary Repository | Chapter Location |
