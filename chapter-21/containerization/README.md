@@ -106,25 +106,27 @@ docker compose up -d
 docker compose ps
 ```
 
-Open:
+### Access Points
 
-- Gateway: http://localhost:8080
-- Eureka: http://localhost:8761
-- Zipkin: http://localhost:9411
-- Keycloak: http://localhost:8090
+- Application: http://localhost (Nginx -> Angular SSR)
+- Keycloak Admin: http://localhost:8090
+- Eureka Dashboard: http://localhost:8761
+- Zipkin Dashboard: http://localhost:9411
 
 ### Services and Ports
 
-| Service | Container Name | Port |
-|---|---|---|
-| Gateway | `bookstore-gateway-server` | `8080` |
-| Eureka | `bookstore-eureka-server` | `8761` |
-| Inventory | `bookstore-inventory-service` | `8081` |
-| User | `bookstore-user-service` | `8082` |
-| Keycloak | `bookstore-keycloak` | `8090` |
-| PostgreSQL | `bookstore-postgres` | `5432` |
-| MongoDB | `bookstore-mongo` | `27017` |
-| Zipkin | `bookstore-zipkin` | `9411` |
+| Service | Container Name | Port | Exposed |
+|---|---|---|---|
+| Nginx | `bookstore-nginx` | `80` | Yes |
+| Angular SSR | `bookstore-ng-frontend` | `4000` | No (internal) |
+| Gateway | `bookstore-gateway-server` | `8080` | Yes (debug) |
+| Eureka | `bookstore-eureka-server` | `8761` | Yes (debug) |
+| Inventory | `bookstore-inventory-service` | `8081` | Yes (debug) |
+| User | `bookstore-user-service` | `8082` | Yes (debug) |
+| Keycloak | `bookstore-keycloak` | `8090` | Yes |
+| PostgreSQL | `bookstore-postgres` | `5432` | Yes |
+| MongoDB | `bookstore-mongo` | `27017` | Yes |
+| Zipkin | `bookstore-zipkin` | `9411` | Yes |
 
 ### Useful Runtime Commands
 

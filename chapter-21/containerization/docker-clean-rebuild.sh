@@ -1,5 +1,4 @@
 #!/bin/bash
-#!/bin/bash
 
 # Robust Docker cleanup and rebuild script for all project and infra containers
 # Services: eureka-server, gateway-server, inventory-ms, user-ms, postgres, mongo, zipkin, keycloak
