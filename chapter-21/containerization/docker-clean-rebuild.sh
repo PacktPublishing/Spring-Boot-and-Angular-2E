@@ -2,12 +2,19 @@
 
 # Robust Docker cleanup and rebuild script for all project and infra containers
 # Services: eureka-server, gateway-server, inventory-ms, user-ms, postgres, mongo, zipkin, keycloak
-# Usage: ./docker-clean-rebuild.sh
+# Usage: ./docker-clean-rebuild.sh [--purge-images]
 
 set -euo pipefail
 
 PROJECT_NAME="bookstore"
-COMPOSE_FILE="containerization/docker-compose.yml"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+COMPOSE_FILE="$SCRIPT_DIR/docker-compose.yml"
+COMPOSE_CMD=(docker compose -f "$COMPOSE_FILE")
+PURGE_IMAGES=false
+
+if [[ "${1:-}" == "--purge-images" ]]; then
+  PURGE_IMAGES=true
+fi
 
 echo "[INFO] Stopping all running containers related to the project and infra..."
 docker ps -a --format '{{.Names}}' | grep -E 'eureka|gateway|inventory|user|postgres|mongo|zipkin|keycloak' | xargs -r docker stop || true
@@ -15,8 +22,12 @@ docker ps -a --format '{{.Names}}' | grep -E 'eureka|gateway|inventory|user|post
 echo "[INFO] Removing all containers related to the project and infra..."
 docker ps -a --format '{{.Names}}' | grep -E 'eureka|gateway|inventory|user|postgres|mongo|zipkin|keycloak' | xargs -r docker rm -f || true
 
-echo "[INFO] Removing all images related to the project and infra..."
-docker images --format '{{.Repository}}:{{.Tag}} {{.ID}}' | grep -E 'eureka|gateway|inventory|user|postgres|mongo|zipkin|keycloak' | awk '{print $2}' | xargs -r docker rmi -f || true
+if [[ "$PURGE_IMAGES" == true ]]; then
+  echo "[INFO] Removing all images related to the project and infra (--purge-images enabled)..."
+  docker images --format '{{.Repository}}:{{.Tag}} {{.ID}}' | grep -E 'eureka|gateway|inventory|user|postgres|mongo|zipkin|keycloak' | awk '{print $2}' | xargs -r docker rmi -f || true
+else
+  echo "[INFO] Keeping existing downloaded images (pass --purge-images to remove them)."
+fi
 
 echo "[INFO] Removing all volumes related to the project and infra..."
 docker volume ls --format '{{.Name}}' | grep -E 'eureka|gateway|inventory|user|postgres|mongo|zipkin|keycloak' | xargs -r docker volume rm || true
@@ -27,46 +38,15 @@ docker network ls --format '{{.Name}}' | grep -E 'eureka|gateway|inventory|user|
 echo "[INFO] Pruning unused Docker resources (optional)..."
 docker system prune -f
 
-echo "[INFO] Building latest images using docker-compose..."
-docker-compose -f "$COMPOSE_FILE" build --no-cache
+if "${COMPOSE_CMD[@]}" config | grep -q '^[[:space:]]*build:'; then
+  echo "[INFO] Building latest images from local Dockerfiles..."
+  "${COMPOSE_CMD[@]}" build --no-cache
+else
+  echo "[INFO] No build contexts found in compose file. Pulling images instead..."
+  "${COMPOSE_CMD[@]}" pull
+fi
 
-echo "[INFO] Starting up all services with docker-compose..."
-docker-compose -f "$COMPOSE_FILE" up -d
+echo "[INFO] Starting up all services with Docker Compose..."
+"${COMPOSE_CMD[@]}" up -d --remove-orphans
 
 echo "[SUCCESS] All containers rebuilt and started."
-# Remove all images related to the project (by name pattern)
-IMAGES=$(docker images --format '{{.Repository}}:{{.Tag}}' | grep "$PROJECT_NAME" || true)
-if [ -n "$IMAGES" ]; then
-  echo "$IMAGES" | xargs -n 1 docker rmi -f || true
-  echo "Project images removed."
-else
-  echo "No project images found to remove."
-fi
-
-# Remove all volumes related to the project (by name pattern)
-VOLUMES=$(docker volume ls --format '{{.Name}}' | grep "$PROJECT_NAME" || true)
-if [ -n "$VOLUMES" ]; then
-  echo "$VOLUMES" | xargs -n 1 docker volume rm -f || true
-  echo "Project volumes removed."
-else
-  echo "No project volumes found to remove."
-fi
-
-# Remove all networks related to the project (by name pattern)
-NETWORKS=$(docker network ls --format '{{.Name}}' | grep "$PROJECT_NAME" || true)
-if [ -n "$NETWORKS" ]; then
-  echo "$NETWORKS" | xargs -n 1 docker network rm || true
-  echo "Project networks removed."
-else
-  echo "No project networks found to remove."
-fi
-
-# Build latest images and recreate everything
-if docker compose build --no-cache && docker compose up -d --remove-orphans; then
-  echo "Docker Compose environment rebuilt and started."
-else
-  echo "Docker Compose build or up failed."
-  exit 1
-fi
-
-echo "All project containers, images, volumes, and networks have been cleaned and recreated."

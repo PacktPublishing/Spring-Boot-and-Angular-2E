@@ -30,6 +30,7 @@ https://github.com/PacktPublishing/Spring-Boot-and-Angular-2E/tree/main/chapter-
   - [Running the Full Platform Locally Using Docker Compose](#running-the-full-platform-locally-using-docker-compose)
     - [Services and Ports](#services-and-ports)
     - [Useful Runtime Commands](#useful-runtime-commands)
+    - [One-Command Clean Rebuild Script](#one-command-clean-rebuild-script)
   - [Enabling Secure Communication Between Frontend and Backend](#enabling-secure-communication-between-frontend-and-backend)
     - [Why This Matters](#why-this-matters)
     - [Recommended Communication Model](#recommended-communication-model)
@@ -137,6 +138,24 @@ docker compose logs -f --tail=200 gateway-server
 docker compose restart inventory-service
 docker compose down
 docker compose down -v
+```
+
+### One-Command Clean Rebuild Script
+
+If you want to reset and restart the full stack in one command, use:
+
+```bash
+./docker-clean-rebuild.sh
+```
+
+Behavior notes:
+
+- The script resolves `docker-compose.yml` from the script directory, so it works even if you run it from a different current working directory.
+- Existing downloaded images are kept by default to avoid unnecessary re-downloads.
+- To force image deletion, run:
+
+```bash
+./docker-clean-rebuild.sh --purge-images
 ```
 
 ## Enabling Secure Communication Between Frontend and Backend
@@ -283,6 +302,20 @@ docker system prune -f
 docker compose pull
 docker compose up -d
 ```
+
+If you prefer the script-based reset flow:
+
+```bash
+./docker-clean-rebuild.sh
+```
+
+If you also need to remove previously downloaded images:
+
+```bash
+./docker-clean-rebuild.sh --purge-images
+```
+
+`WARN[0000] No services to build` is expected when your compose file uses only `image:` entries and does not define any `build:` blocks.
 
 ## References
 

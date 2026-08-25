@@ -1,7 +1,7 @@
 services:
   # Database Services
   postgres:
-    image: postgres:17
+    image: postgres:17.10
     container_name: bookstore-postgres
     environment:
       POSTGRES_USER: bookstore
@@ -20,7 +20,7 @@ services:
       - bookstore-network
 
   mongodb:
-    image: mongo:8
+    image: mongo:8.0.26
     container_name: bookstore-mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: bookstore
@@ -41,7 +41,7 @@ services:
 
   # Observability Services
   zipkin:
-    image: openzipkin/zipkin:latest
+    image: openzipkin/zipkin:3.6.1
     container_name: bookstore-zipkin
     ports:
       - "9411:9411"
@@ -63,7 +63,7 @@ services:
 
   # Identity Provider
   keycloak:
-    image: quay.io/keycloak/keycloak:26.0.0
+    image: quay.io/keycloak/keycloak:26.0.8
     container_name: bookstore-keycloak
     command: start-dev --import-realm
     environment:
