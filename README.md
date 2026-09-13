@@ -11,32 +11,33 @@ You’ll find backend and frontend code, guides, and resources for each section.
 ## 📖 Book Structure
 
 ### Part 1: Overview of Spring Boot and Angular development
-#### 1. Spring Boot and Angular: The Big Picture and Kickstart the Environment.
+#### 1. Spring Boot and Angular: The Big Picture and Environment Kickstart
 ---
-### Part 2: Backend Development,
-#### 2. Getting started with microservices using Spring Boot
-#### 3. Setting up database and repositories using Spring Data JPA
-#### 4. Building application services and APls with Spring
-#### 5. Developing API Gateway using Spring Cloud
-#### 6. Documenting APls with OpenAPl and logging the events.
-#### 7. Securing microservice using Spring Boot Security and JWT
-#### 8. End-to-end microservices components testing
-#### 9. Reactive programming using Spring WebFlux
+### Part 2: Backend Development
+#### 2. Getting Started with Microservices Using Spring Boot
+#### 3. Setting Up Your Development AI Assistant
+#### 4. Setting Up Databases and Repositories Using Spring Data
+#### 5. Building Application Services and APIs with Spring
+#### 6. Service Discovery and API Gateway with Spring Cloud
+#### 7. Documenting APIs with OpenAPI and Logging Events
+#### 8. Securing Microservices with Spring Security and JWT
+#### 9. Reactive Programming with Spring WebFlux
+#### 10. Building and Packaging the Spring Boot Backend
 ---
-### PART 3: Frontend Development,
-#### 10. Setting up Angular project and architecture
-#### 11. Building Forms with Reactive Patters
-#### 12. Managing State with Signals and Stores
-#### 13. Performing CRUD Operations with State Management|
-#### 14. Adding authentication in Angular
-#### 15. Writing tests in Angular
-#### 16. Server-Side Rendering with Angular (SSR)
-#### 17. Handling Real-Time Data with Angular
+### Part 3: Frontend Development
+#### 11. Angular Frontend Foundation
+#### 12. AI-Assisted Angular Development
+#### 13. Building Forms with Reactive Patterns
+#### 14. Angular State Management with Signals and Stores
+#### 15. CRUD Workflows with State Management
+#### 16. Authentication, Interceptors, Guards, and Profile Management
+#### 17. API-Driven Books and Authors with NgRx Signal Store
+#### 18. Hybrid Rendering, Hydration, and Deferred Loading
+#### 19. Real-Time Updates with Server-Sent Events
+#### 20. Production Build and Docker Containerization (Angular)
 ---
-### PART 4: Deployment
-#### 18. Building and Deploying the Angular Frontend
-#### 19. Building and Packaging the Spring Boot Backend
-#### 20. Connecting Frontend and Backend in Production
+### Part 4: Deployment
+#### 21. Connecting Frontend and Backend in Production
 
 ---
 
