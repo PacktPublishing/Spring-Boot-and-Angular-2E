@@ -11,32 +11,33 @@ You’ll find backend and frontend code, guides, and resources for each section.
 ## 📖 Book Structure
 
 ### Part 1: Overview of Spring Boot and Angular development
-#### 1. Spring Boot and Angular: The Big Picture and Kickstart the Environment.
+#### 1. Spring Boot and Angular: The Big Picture and Environment Kickstart
 ---
-### Part 2: Backend Development,
-#### 2. Getting started with microservices using Spring Boot
-#### 3. Setting up database and repositories using Spring Data JPA
-#### 4. Building application services and APls with Spring
-#### 5. Developing API Gateway using Spring Cloud
-#### 6. Documenting APls with OpenAPl and logging the events.
-#### 7. Securing microservice using Spring Boot Security and JWT
-#### 8. End-to-end microservices components testing
-#### 9. Reactive programming using Spring WebFlux
+### Part 2: Backend Development
+#### 2. Getting Started with Microservices Using Spring Boot
+#### 3. Setting Up Your Development AI Assistant
+#### 4. Setting Up Databases and Repositories Using Spring Data
+#### 5. Building Application Services and APIs with Spring
+#### 6. Service Discovery and API Gateway with Spring Cloud
+#### 7. Documenting APIs with OpenAPI and Logging Events
+#### 8. Securing Microservices with Spring Security and JWT
+#### 9. Reactive Programming with Spring WebFlux
+#### 10. Building and Packaging the Spring Boot Backend
 ---
-### PART 3: Frontend Development,
-#### 10. Setting up Angular project and architecture
-#### 11. Building Forms with Reactive Patters
-#### 12. Managing State with Signals and Stores
-#### 13. Performing CRUD Operations with State Management|
-#### 14. Adding authentication in Angular
-#### 15. Writing tests in Angular
-#### 16. Server-Side Rendering with Angular (SSR)
-#### 17. Handling Real-Time Data with Angular
+### Part 3: Frontend Development
+#### 11. Angular Frontend Foundation
+#### 12. AI-Assisted Angular Development
+#### 13. Building Forms with Reactive Patterns
+#### 14. Angular State Management with Signals and Stores
+#### 15. CRUD Workflows with State Management
+#### 16. Authentication, Interceptors, Guards, and Profile Management
+#### 17. API-Driven Books and Authors with NgRx Signal Store
+#### 18. Hybrid Rendering, Hydration, and Deferred Loading
+#### 19. Real-Time Updates with Server-Sent Events
+#### 20. Production Build and Docker Containerization (Angular)
 ---
-### PART 4: Deployment
-#### 18. Building and Deploying the Angular Frontend
-#### 19. Building and Packaging the Spring Boot Backend
-#### 20. Connecting Frontend and Backend in Production
+### Part 4: Deployment
+#### 21. Connecting Frontend and Backend in Production
 
 ---
 
@@ -54,6 +55,32 @@ You’ll find backend and frontend code, guides, and resources for each section.
 3. **Follow instructions in each part’s README** for backend and frontend setup.
 
 ---
+
+## Backend Chapter Paragraphs (Chapter 1-10)
+
+Chapter 1, Spring Boot and Angular – Understand the Big Picture and Kickstart the Environment, introduces the bookstore application you will build throughout the book, explains the overall architecture that combines Spring Boot microservices on the backend with an Angular frontend, and walks you through installing the JDK, Maven, Node.js, Angular CLI, Docker, and an IDE so your environment is ready for the rest of the book.
+
+Chapter 2, Getting Started With Microservices Using Spring Boot, covers the fundamentals of Spring Boot and microservices architecture, explains how to decompose a system by business capability, introduces the design patterns reused throughout the backend chapters, and guides you through bootstrapping the first service with a clean layered structure and production-minded project setup.
+
+Chapter 3, Setting up your development AI Assistant, shows you how to set up GitHub Copilot for backend development, configure project-specific instruction files to align AI suggestions with your coding standards, and establish the trust but verify workflow used throughout the book when accelerating development with AI.
+
+Chapter 4, Setting up Database and Repositories using Spring Data, walks you through implementing the persistence layer with Spring Data JPA for PostgreSQL and Spring Data MongoDB for MongoDB, designing entities and documents, creating repository interfaces, and applying polyglot persistence practices that match each microservice's domain needs.
+
+Chapter 5, Building Application Services and APIs with Spring, focuses on implementing the service layer and REST controllers, applying dependency injection and component scanning, structuring DTOs and validation, handling errors consistently, and testing service and controller logic so your microservices expose clean and reliable APIs.
+
+Chapter 6, Developing Service Discovery and API Gateway using Spring Cloud, introduces dynamic service registration with Eureka and gateway routing with Spring Cloud Gateway, so clients can call a single entry point while backend services are discovered and routed dynamically with better resiliency and scalability.
+
+Chapter 7, Documenting APIs with OpenAPI and logging the events, shows how to generate and maintain OpenAPI documentation for your services and how to enable practical observability with structured logging, metrics, and distributed tracing so you can understand, monitor, and debug request flows across microservices.
+
+Chapter 8, Securing Microservices with Spring Security and JWT, implements end-to-end authentication and authorization using OAuth2 and JWT with Keycloak, secures gateway and service endpoints with role-based access control, and validates token propagation patterns required for production-ready microservices security.
+
+Chapter 9, Reactive programming using Spring WebFlux, extends the backend with non-blocking reactive APIs and Server-Sent Events (SSE), enabling real-time notifications for inventory changes while preserving gateway-based routing, observability, and secure write operations.
+
+Chapter 10, Building and Packaging the Spring Boot backend, moves the solution from development runtime to deployment readiness by packaging services as executable artifacts and container images, publishing versioned images, running and troubleshooting containers, and orchestrating the full backend stack with Docker Compose.
+
+---
+
+Happy coding!
 
 ## Chapter-to-Repository Mapping
 

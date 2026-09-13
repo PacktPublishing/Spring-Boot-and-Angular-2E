@@ -28,6 +28,7 @@ https://github.com/PacktPublishing/Spring-Boot-and-Angular-2E/tree/main/chapter-
     - [Networking and Persistence Model](#networking-and-persistence-model)
     - [Backend Image Tag Strategy](#backend-image-tag-strategy)
   - [Running the Full Platform Locally Using Docker Compose](#running-the-full-platform-locally-using-docker-compose)
+    - [Access Points](#access-points)
     - [Services and Ports](#services-and-ports)
     - [Useful Runtime Commands](#useful-runtime-commands)
     - [One-Command Clean Rebuild Script](#one-command-clean-rebuild-script)
@@ -45,7 +46,6 @@ https://github.com/PacktPublishing/Spring-Boot-and-Angular-2E/tree/main/chapter-
     - [5. Gateway Responds but API Calls Fail](#5-gateway-responds-but-api-calls-fail)
     - [6. MongoDB Authentication Errors](#6-mongodb-authentication-errors)
     - [7. Full Environment Reset](#7-full-environment-reset)
-  - [References](#references)
   - [Summary](#summary)
 
 ## Exploring Docker Compose as a Production-Oriented Orchestration Tool
@@ -242,7 +242,7 @@ Fix by stopping conflicting services or adjusting host port mappings.
 
 Ensure this file exists:
 
-- `containerization/Keycloak/bookstore-realm.json`
+- `containerization/keycloak/bookstore-realm.json`
 
 ### 3. Services Remain Unhealthy or Restart Repeatedly
 
@@ -316,14 +316,6 @@ If you also need to remove previously downloaded images:
 ```
 
 `WARN[0000] No services to build` is expected when your compose file uses only `image:` entries and does not define any `build:` blocks.
-
-## References
-
-- Chapter source code: https://github.com/PacktPublishing/Spring-Boot-and-Angular-2E/tree/main/chapter-21
-- Docker Compose docs: https://docs.docker.com/compose/
-- Spring Security Resource Server (JWT): https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html
-- Keycloak documentation: https://www.keycloak.org/documentation
-- Zipkin documentation: https://zipkin.io/pages/quickstart.html
 
 ## Summary
 
