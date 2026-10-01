@@ -1,10 +1,61 @@
+<h1 align="center">
+Spring Boot and Angular, Second Edition</h1>
+<p align="center">This is the code repository for <a href ="https://www.packtpub.com/en-us/product/spring-boot-and-angular-second-edition/9781806114016"> Spring Boot and Angular, Second Edition</a>, published by Packt.
+</p>
 
-# 📚 Spring Boot & Angular Fullstack Book – Code Repository
+<h2 align="center">
+Hands-on full-stack development with Java, Spring, Angular, and TypeScript
+</h2>
+<p align="center">
+Ahmad Gohar, Dimitrios Kyriakakis</p>
+
+<p align="center">
+  <a href="https://packt.link/free-ebook/9781806114016"><img width="32px" alt="Free PDF" title="Free PDF" src="https://cdn-icons-png.flaticon.com/512/4726/4726010.png"/></a>
+ &#8287;&#8287;&#8287;&#8287;&#8287;
+  <a href="https://packt.link/gbp/9781806114016"><img width="32px" alt="Graphic Bundle" title="Graphic Bundle" src="https://cdn-icons-png.flaticon.com/512/2659/2659360.png"/></a>
+  &#8287;&#8287;&#8287;&#8287;&#8287;
+   <a href="https://www.amazon.com/Spring-Boot-Angular-Hands-development/dp/1806114011/"><img width="32px" alt="Amazon" title="Get your copy" src="https://cdn-icons-png.flaticon.com/512/15466/15466027.png"/></a>
+  &#8287;&#8287;&#8287;&#8287;&#8287;
+</p>
 
 Welcome to the companion code repository for the **Spring Boot and Angular** book!
 
 This repository is organized by book chapters and parts.  
 You’ll find backend and frontend code, guides, and resources for each section.
+
+<details open> 
+  <summary><h2>About the book</summary>
+<a href="https://www.packtpub.com/en-us/product/spring-boot-and-angular-second-edition/9781806114016">
+<img src="https://content.packt.com/B34141/cover_image_small.jpg" alt="Spring Boot and Angular, Second Edition" height="256px" align="right">
+</a>
+
+This book is your practical roadmap to building modern, production-ready full-stack applications. Through real-world examples and proven workflows, you’ll combine Spring Boot 4 microservices with Angular 22’s latest features to build secure, scalable systems ready for deployment. This second edition of <i>Spring Boot and Angular</i>, written by two seasoned full-stack experts, starts by laying a solid backend foundation with Spring Boot and Spring Cloud microservices, JWT security, and SQL and NoSQL databases using Spring Data. You’ll then switch to the frontend to build reactive user interfaces with Angular, enable server-side rendering (SSR), and manage real-time data sharing for dynamic applications. You’ll also connect Spring Boot APIs to Angular frontends using best practices and reactive integration patterns.</br>
+The chapters help you master development while boosting efficiency with AI-powered coding using GitHub Copilot in VS Code. This guide will enable you to deploy containerized Spring Boot services, optimize Angular builds, and run the entire platform as a single containerized deployment. By the end of this book, you’ll have built a complete, deployable application and mastered the full development lifecycle.
+</details>
+
+<details open> 
+  <summary><h2>Key Learnings</summary>
+<ul>
+
+<li>Design full-stack apps for enterprise-level architecture</li>
+
+<li>Build Spring Boot microservices with an API gateway</li>
+
+<li>Persist data using Spring Data for SQL and NoSQL</li>
+
+<li>Secure microservices using JWT authentication</li>
+
+<li>Create reactive apps with WebFlux and Angular Signals</li>
+
+<li>Implement SSR in Angular for improved SEO and speed</li>
+
+<li>Stream real-time data in Angular apps</li>
+
+<li>Containerize and deploy the full stack with Docker Compose</li>
+
+</ul>
+
+  </details>
 
 ---
 
@@ -120,3 +171,19 @@ Happy coding!
 - Backend implementation chapters are maintained in the backend repository.
 - Frontend implementation chapters are maintained in the frontend repository.
 
+<details> 
+  <summary><h2>Get to know the authors</h2></summary>
+
+_Ahmad Gohar_ Dr. is a principal solution architect (Sr. Manager) working for IBM USA, Centerof Competence. Holding a Ph.D. & M.Sc. in Information Systems and an MBA in GlobalBusiness Management, he specializes in Java-based full-stack development, microservicesarchitecture, and cloud-native solutions. He is currently passionate about architecting secureagentic AI before it becomes a liability. With over 20 years of technical experience across 10+countries, he has led solution architecture for complex, high-stakes programs in US enterpriseconsulting, banking, and government digital transformation. He currently focuses on cloud-native and agentic AI platforms in the US market, including a zero-trust security overhaul thatreduced secrets/API breach risk. He loves diving (advanced open-water-certified), equestrianactivities, and playing tennis. Originally from Egypt, he now lives in the USA.
+
+_Dimitrios Kyriakakis_ is a technical lead at ZEAL, specializing in Angular architecture and full-stack development across web, backend, and mobile. He has over 10 years of experiencebuilding modern web and mobile applications using clean architecture and scalable infrastructure, and he also offers technical consulting as a freelancer. He holds a degree inElectrical and Computer Engineering from the Technical University of Crete.
+Dimitrios is an active member of the Angular community: he speaks at internationalconferences such as JSNation and NG-Poland, writes technical articles on his blog,dimeloper.com, and on other platforms, and mentors aspiring developers on ADPList. He ispassionate about fostering the developer community and creating content that helps othersgrow in their craft. Originally from Greece, he now lives in Germany. 
+</details>
+
+<details> 
+  <summary><h2>Other related books</h2></summary>
+<ul>
+  <li><a href="https://www.packtpub.com/en-us/product/building-ai-powered-apps-with-angular-first-edition/9781806383498">Building AI-Powered Apps with Angular, First Edition</a></li>
+  <li><a href="https://www.packtpub.com/en-us/product/learning-spring-boot-4-fourth-edition/9781807427115">Learning Spring Boot 4, Fourth Edition</a></li>
+</ul>
+</details>
